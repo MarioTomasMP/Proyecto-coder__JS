@@ -1,12 +1,13 @@
-// funcion suma
+// funcion suma y division.
 const suma = (a, b) => a + b;
+const division = (a, b) => a / b;
 let bucle = true;
 
 var NotasTotales=null;
-var Promedio=0;
+var Promedio=null;
 
 
-//bucle en el cual se pide la nota y evalua si la nota puesta es valida
+//bucle en el cual se pide la nota, las suma y almacena, y tambien evalua si la nota puesta es valida.
 while (bucle) {
     var Notas = Nota()
     if (!isNaN(Notas) && Notas <= 10 && Notas > 0 && Notas != "" && Notas != null) {
@@ -25,15 +26,16 @@ let alumnos;
 
 // bucle que se encarga de pedir la cantidad de alumnos y asi sacar el promedio de las notas.
 while (bucle) {
-    let alumnos = Number(prompt("Ingrese la cantidad de alumnos"));
+    alumnos = Number(prompt("Ingrese la cantidad de alumnos"));
 
-    switch(alumnos){
-        case (alumnos > 0):
-            alert("El promedio del curso es"+" "+Promedio(NotasTotales / alumnos));
-            break;
-        default:
-            alert("No pudo realizarse el promedio");
-            break;
+    if (!isNaN(alumnos) && alumnos != "" && alumnos != null) {
+        var Promedio = division(NotasTotales, alumnos);
+        alert("el promedio de las notas del curso es"+" "+Promedio);
+        console.log(Promedio);
+        break;
+    }else {
+        alert("La cantidad de alumnos ingressada es invalida")
+        continue;
     }
 }
 
