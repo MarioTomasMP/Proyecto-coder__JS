@@ -1,47 +1,155 @@
-// funcion suma y division.
-const suma = (a, b) => a + b;
-const division = (a, b) => a / b;
+let turno= Math.floor(Math.random() * 10);
+let Miturno=[];
+const Medicos = [{Especialidad: "clinica medica", Doctor: "oscar, rodriguez"},
+    {Especialidad: "anestesiologia", Doctor: "rosa, marcello"},
+    {Especialidad: "quimioterapia", Doctor: "ana, marquez"},
+    {Especialidad: "clinica medica", Doctor: "marcelo, sanchez"},
+    {Especialidad: "pediatria", Doctor: "antonio, muñoz"},
+    {Especialidad: "anestesiologia", Doctor: "panda, martinez"},
+    {Especialidad: "pediatria", Doctor: "hercules, martinez"},
+    {Especialidad: "pediatria", Doctor: "jose, muller"}];
+
+const ObraSocial= ["osam", "osde", "sancor", "sadop"];
+
 let bucle = true;
 
-var NotasTotales=null;
-var Promedio=null;
+alert("Bienvenidos al sanatorio de tomi");
 
+while(bucle) {
+    let pregunta = "Que desea hacer?: ";
+    pregunta += "\n1. Sacar un Turno";
+    pregunta += "\n2. Dar de baja mi turno";
+    pregunta += "\n3. Mostrar mis turnos"; 
+    pregunta += "\n4. Salir del turnero";
 
-//bucle en el cual se pide la nota, las suma y almacena, y tambien evalua si la nota puesta es valida.
-while (bucle) {
-    var Notas = Nota()
-    if (!isNaN(Notas) && Notas <= 10 && Notas > 0 && Notas != "" && Notas != null) {
-        var NotasTotales = suma(NotasTotales, Notas);
-        alert("La suma de las notas es"+" "+NotasTotales);
-        console.log(NotasTotales);
-        continue;
-    }else {
-        alert("La nota ingresada no es valida")
-        break;
+    let respuesta = parseInt(prompt(pregunta));
+
+    switch (respuesta) {
+
+        case 1:
+            sacarTurno();
+            break;
+        case 2:
+            eliminarTurno();
+            break;
+        case 3:
+            mostrarTurnos();
+            break;
+        case 4:
+            alert("Gracias por usar el turnero!")
+            break;
+            bucle = false;
+        default:
+            alert("No ingresaste una opcion valida");
+            break;
+    }
+}
+
+class Turno {
+    constructor(Especialidad, Doctores){
+        this.Especialidad = Especialidad;
+        this.Doctores = Doctores;
+        this.turnoSacado = false;
+        this.turno = -1;
+    }
+    SetTurno(nuevoTurno) {
+        this.turno = nuevoTurno;
+    }
+    descricionTurno() {
+        return (`${this.turno} - ${this.Especialidad} - ${this.Doctores}`)
+    }
+    TengoTurno(){
+        this.turnoSacado = true;
+    }
+}
+
+//Funcion para cargar el turno
+
+function sacarTurno(){
+    let turnoNuevo = SolicitarTurnoNuevo();
+
+    if (turnoNuevo) {
+
+        turnoNuevo.SetTurno(turno);
+        turno = turno + Math.floor(Math.random() * 10);
+        Miturno.push(turnoNuevo);
+        alert("Turno guardado")
+    }
+}
+
+// funcion que solicita especialidad y nombre del doctor;
+
+function SolicitarTurnoNuevo(){
+    let check = true;
+
+    while (check) {
+        let mensaje = "";
+        let Especialidad = prompt("Ingrese al profesional que necesita: \npediatria \nclinica medica \nquinesiologia \nanestesiologia");
+        let Doctores = prompt("Ingrese el nombre del medico que quiera que lo atienda: \nPediatra: antonio, muños ; hercules, martinez; jose, muller. \nClinica medica: oscar, rodriguez; marcelo, sanchez. \nAnestesiologia: rosa, marcello; panda, martinez. \nQuimiterapia: ana, marquez.");
+
+        if (!Especialidad){
+            mensaje += "Debe ingresar una especialida valida";
+        }
+        if (!Doctores){
+            mensaje += "Debe ingresar doctor valida";
+        }
+        if(mensaje !=""){
+            alert(mensaje);
+            check = confirm("Quieres cargar de nuevo los datos?");
+        }else {
+            return new Turno(Especialidad, Doctores);
+        }
+    }
+}
+
+//Funcion que elimina el turno
+
+function eliminarTurno(){
+
+    if(TendreMiTurno()){
+        verTurno();
+        let TurnoId = parseInt(prompt("Ingrese el numero del turno que desea cancelar:"));
+
+        if (TurnoId) {
+            let TurnoEncontrado = Miturno.find((turno)=> turno.id == TurnoId);
+
+            if (TurnoEncontrado) {
+                let encontrado = confirm("Desea borrar el turno seleccionado");
+                if (encontrado){
+                    Miturno=Miturno.filter((doctor)=> turno.id != TurnoId);
+                    alert("Turno eliminado");
+                }
+            }
+        }
     }
 }
 
 
-let alumnos;
+//Funcion para vel el turno guardado
 
-// bucle que se encarga de pedir la cantidad de alumnos y asi sacar el promedio de las notas.
-while (bucle) {
-    alumnos = Number(prompt("Ingrese la cantidad de alumnos"));
+function TendreMiTurno(){
+    if (Miturno.length == 0){
+        alert("Usted no a sacado turno");
+        return false;
+    }
+    return true;
+}
 
-    if (!isNaN(alumnos) && alumnos != "" && alumnos != null) {
-        var Promedio = division(NotasTotales, alumnos);
-        alert("el promedio de las notas del curso es"+" "+Promedio);
-        console.log(Promedio);
-        break;
-    }else {
-        alert("La cantidad de alumnos ingressada es invalida")
-        continue;
+//Funcion para ver mis turnos
+
+function mostrarTurnos(){
+    if (TendreMiTurno()) {
+        verTurno();
     }
 }
 
+//Funcion que recrorre mis turnos
+function verTurno() {
+    let mensaje = "Sus turnos son:"
 
+    Miturno.forEach(doctor => {
+        mensaje += doctor.descricionTurno() + "\n";
 
-//Funcion que pide la nota del alumno
-function Nota(Nota) {
-    return Nota = Number(prompt("Ingrese el nota del alumno para sacar el promedio total del curso"));
+    })
+    alert(mensaje);
 }
