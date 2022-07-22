@@ -1,5 +1,24 @@
 let turno= Math.floor(Math.random() * 10);
 let Miturno=[];
+
+class Turno {
+    constructor(Especialidad, Doctores){
+        this.Especialidad = Especialidad;
+        this.Doctores = Doctores;
+        this.turnoSacado = false;
+        this.turno = -1;
+    }
+    SetTurno(nuevoTurno) {
+        this.turno = nuevoTurno;
+    }
+    descricionTurno() {
+        return (`${this.turno} - ${this.Especialidad} - ${this.Doctores}`)
+    }
+    TengoTurno(){
+        this.turnoSacado = true;
+    }
+}
+
 const Medicos = [{Especialidad: "clinica medica", Doctor: "oscar, rodriguez"},
     {Especialidad: "anestesiologia", Doctor: "rosa, marcello"},
     {Especialidad: "quimioterapia", Doctor: "ana, marquez"},
@@ -36,32 +55,15 @@ while(bucle) {
             mostrarTurnos();
             break;
         case 4:
-            alert("Gracias por usar el turnero!")
-            break;
+            alert("Gracias por usar el turnero!");
             bucle = false;
+            break;
         default:
             alert("No ingresaste una opcion valida");
             break;
     }
 }
 
-class Turno {
-    constructor(Especialidad, Doctores){
-        this.Especialidad = Especialidad;
-        this.Doctores = Doctores;
-        this.turnoSacado = false;
-        this.turno = -1;
-    }
-    SetTurno(nuevoTurno) {
-        this.turno = nuevoTurno;
-    }
-    descricionTurno() {
-        return (`${this.turno} - ${this.Especialidad} - ${this.Doctores}`)
-    }
-    TengoTurno(){
-        this.turnoSacado = true;
-    }
-}
 
 //Funcion para cargar el turno
 
@@ -74,15 +76,17 @@ function sacarTurno(){
         turno = turno + Math.floor(Math.random() * 10);
         Miturno.push(turnoNuevo);
         alert("Turno guardado")
+    }else {
+        alert("No se pudo guardar el turno");
     }
 }
 
 // funcion que solicita especialidad y nombre del doctor;
 
 function SolicitarTurnoNuevo(){
-    let check = true;
+    let pedido = true;
 
-    while (check) {
+    while (pedido) {
         let mensaje = "";
         let Especialidad = prompt("Ingrese al profesional que necesita: \npediatria \nclinica medica \nquinesiologia \nanestesiologia");
         let Doctores = prompt("Ingrese el nombre del medico que quiera que lo atienda: \nPediatra: antonio, muños ; hercules, martinez; jose, muller. \nClinica medica: oscar, rodriguez; marcelo, sanchez. \nAnestesiologia: rosa, marcello; panda, martinez. \nQuimiterapia: ana, marquez.");
@@ -95,7 +99,7 @@ function SolicitarTurnoNuevo(){
         }
         if(mensaje !=""){
             alert(mensaje);
-            check = confirm("Quieres cargar de nuevo los datos?");
+            pedido = confirm("Quieres cargar de nuevo los datos?");
         }else {
             return new Turno(Especialidad, Doctores);
         }
@@ -111,12 +115,12 @@ function eliminarTurno(){
         let TurnoId = parseInt(prompt("Ingrese el numero del turno que desea cancelar:"));
 
         if (TurnoId) {
-            let TurnoEncontrado = Miturno.find((turno)=> turno.id == TurnoId);
+            let TurnoEncontrado = Miturno.find((turno)=> turno.turno == TurnoId);
 
             if (TurnoEncontrado) {
                 let encontrado = confirm("Desea borrar el turno seleccionado");
                 if (encontrado){
-                    Miturno=Miturno.filter((doctor)=> turno.id != TurnoId);
+                    Miturno=Miturno.filter((turno)=> turno.turno != TurnoId);
                     alert("Turno eliminado");
                 }
             }
@@ -148,8 +152,6 @@ function verTurno() {
     let mensaje = "Sus turnos son:"
 
     Miturno.forEach(doctor => {
-        mensaje += doctor.descricionTurno() + "\n";
-
-    })
+        mensaje += doctor.descricionTurno() + "\n"});
     alert(mensaje);
 }
